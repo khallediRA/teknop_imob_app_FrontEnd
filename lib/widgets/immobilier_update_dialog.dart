@@ -5,8 +5,9 @@ import 'package:test_web_app/models/immobilier_post.dart';
 import 'package:test_web_app/screens/home_screen.dart';
 import 'package:test_web_app/services/network_calls.dart';
 
-_buildTitle() {
+_buildTitle(String initialTitle) {
   return TextFormField(
+    initialValue: initialTitle,
     decoration: InputDecoration(
       labelText: "Titre de la publication",
       labelStyle: TextStyle(
@@ -30,8 +31,9 @@ _buildTitle() {
   );
 }
 
-_buildContact() {
+_buildContact(int initialContact) {
   return TextFormField(
+    initialValue: initialContact.toString(),
     decoration: InputDecoration(
       labelText: "Contact",
       labelStyle: TextStyle(
@@ -56,8 +58,9 @@ _buildContact() {
   );
 }
 
-_buildPrice() {
+_buildPrice(double initialPrice) {
   return TextFormField(
+    initialValue: initialPrice.toString(),
     decoration: InputDecoration(
       labelText: "Prix",
       labelStyle: TextStyle(
@@ -82,8 +85,9 @@ _buildPrice() {
   );
 }
 
-_buildSuperficie() {
+_buildSuperficie(double initialSuperficie) {
   return TextFormField(
+    initialValue: initialSuperficie.toString(),
     decoration: InputDecoration(
       labelText: "Superficie",
       labelStyle: TextStyle(
@@ -108,8 +112,9 @@ _buildSuperficie() {
   );
 }
 
-_buildAdresse() {
+_buildAdresse(String initialAdresse) {
   return TextFormField(
+    initialValue: initialAdresse,
     decoration: InputDecoration(
       labelText: "Addresse",
       labelStyle: TextStyle(
@@ -133,8 +138,9 @@ _buildAdresse() {
   );
 }
 
-_buildCountryName() {
+_buildCountryName(String initialCountryName) {
   return TextFormField(
+    initialValue: initialCountryName,
     decoration: InputDecoration(
       labelText: "Pays",
       labelStyle: TextStyle(
@@ -158,8 +164,9 @@ _buildCountryName() {
   );
 }
 
-_buildCityName() {
+_buildCityName(String initialCityName) {
   return TextFormField(
+    initialValue: initialCityName,
     decoration: InputDecoration(
       labelText: "Ville",
       labelStyle: TextStyle(
@@ -183,8 +190,9 @@ _buildCityName() {
   );
 }
 
-_buildDescription() {
+_buildDescription(String initialDescrition) {
   return TextFormField(
+    initialValue: initialDescrition,
     maxLines: 5,
     minLines: 3,
     decoration: InputDecoration(
@@ -229,14 +237,16 @@ String? cityname;
 int? contact;
 double? superficie;
 
-class ImmobilerAddingDialog extends StatefulWidget {
-  const ImmobilerAddingDialog({Key? key}) : super(key: key);
+class ImmobilerUpdateDialog extends StatefulWidget {
+  final ImmobilierPost immobilierPost;
+  const ImmobilerUpdateDialog({Key? key, required this.immobilierPost})
+      : super(key: key);
 
   @override
-  _ImmobilerAddingDialogState createState() => _ImmobilerAddingDialogState();
+  _ImmobilerUpdateDialogState createState() => _ImmobilerUpdateDialogState();
 }
 
-class _ImmobilerAddingDialogState extends State<ImmobilerAddingDialog> {
+class _ImmobilerUpdateDialogState extends State<ImmobilerUpdateDialog> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -250,7 +260,7 @@ class _ImmobilerAddingDialogState extends State<ImmobilerAddingDialog> {
         height: 40,
         child: Center(
           child: Text(
-            "Créer une nouvelle annonce",
+            "Modification publication",
             textAlign: TextAlign.center,
           ),
         ),
@@ -270,35 +280,35 @@ class _ImmobilerAddingDialogState extends State<ImmobilerAddingDialog> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildTitle(),
+                  _buildTitle(widget.immobilierPost.title!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildContact(),
+                  _buildContact(widget.immobilierPost.contact!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildPrice(),
+                  _buildPrice(widget.immobilierPost.price!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildSuperficie(),
+                  _buildSuperficie(widget.immobilierPost.superficie!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildAdresse(),
+                  _buildAdresse(widget.immobilierPost.adresse!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildCountryName(),
+                  _buildCountryName(widget.immobilierPost.countryName!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildCityName(),
+                  _buildCityName(widget.immobilierPost.cityname!),
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildDescription(),
+                  _buildDescription(widget.immobilierPost.description!),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -335,6 +345,8 @@ class _ImmobilerAddingDialogState extends State<ImmobilerAddingDialog> {
                           Random random = new Random();
                           int randomNumber = random.nextInt(5);
                           ImmobilierPost immobilierPost = ImmobilierPost(
+                              immobilierPostId:
+                                  widget.immobilierPost.immobilierPostId,
                               adresse: adresse,
                               title: title,
                               cityname: cityname,
@@ -343,10 +355,10 @@ class _ImmobilerAddingDialogState extends State<ImmobilerAddingDialog> {
                               description: description,
                               price: price,
                               superficie: superficie,
-                              imageUrl: "assets/images/pic $randomNumber.jpg");
+                              imageUrl: widget.immobilierPost.imageUrl);
                           NetworkCalls networkCalls = NetworkCalls();
                           await networkCalls
-                              .createNewImmobilierPost(immobilierPost);
+                              .updateImmobilierPost(immobilierPost);
 
                           Navigator.push(
                             context,

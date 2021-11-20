@@ -10,8 +10,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
-    print(screenSize);
-
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: AppBar(

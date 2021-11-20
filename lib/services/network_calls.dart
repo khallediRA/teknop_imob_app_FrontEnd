@@ -6,7 +6,7 @@ class NetworkCalls {
   static const String baseUrl = 'http://localhost:8080/api/posts';
   Future<List<ImmobilierPost>> getAllPosts() async {
     final response = await http.get(Uri.parse(baseUrl + "/getAllPosts"));
-    print(response);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       final result = json.decode(response.body);
       Iterable list = result;
@@ -21,10 +21,25 @@ class NetworkCalls {
     }
   }
 
-  Future<int> createNewImmobilierPost(String immobilierPost) async {
-    print(immobilierPost);
-    final response = await http.post(Uri.parse(baseUrl),
-        body: immobilierPost,
+  Future<int> createNewImmobilierPost(ImmobilierPost immobilierPost) async {
+    String body = immobilierPost.toJson();
+    final response = await http.post(Uri.parse(baseUrl), body: body, headers: {
+      "Content-type": "application/json",
+      "Accept": "application/json"
+    });
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.statusCode;
+    } else {
+      response.statusCode;
+      throw Exception('Failed Post New Immobilier');
+    }
+  }
+
+  Future<int> updateImmobilierPost(ImmobilierPost immobilierPost) async {
+    String body = immobilierPost.toJson();
+    final response = await http.put(
+        Uri.parse(baseUrl + "/updateImmobilierPost"),
+        body: body,
         headers: {
           "Content-type": "application/json",
           "Accept": "application/json"
@@ -33,7 +48,7 @@ class NetworkCalls {
       return response.statusCode;
     } else {
       response.statusCode;
-      throw Exception('Failed Post New Immobilier');
+      throw Exception('Failed Update on Immobilier');
     }
   }
 }

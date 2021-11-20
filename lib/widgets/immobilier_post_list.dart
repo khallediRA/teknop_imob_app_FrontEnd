@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_web_app/models/immobilier_post.dart';
 import 'package:test_web_app/services/network_calls.dart';
 import 'package:test_web_app/widgets/immobilier_post_list_builder.dart';
+import 'package:test_web_app/widgets/shimmer_build.dart';
 
 class ImmobilierPostList extends StatefulWidget {
   const ImmobilierPostList({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _ImmobilierPostListState extends State<ImmobilierPostList> {
           } else if (immobilierPostList.hasError) {
             return Text('${immobilierPostList.error}');
           }
-          return Text("here");
+          return builShimmerEffect(context);
           // return builShimmerEffect(context);
         });
   }
